@@ -10,7 +10,7 @@ def generate_positive_fortune():
         "财运亨通，意外之喜可能降临，小投入大回报！",
         "健康活力充沛，精神饱满，是开启新挑战的好时机！",
         "学业或事业上会有突破性进展，灵感源源不断！",
-        "爱情运甜蜜升温，和心爱的人关系更进一步，单身者可能遇到心仪对象！",
+        "爱情运甜蜜升温，和心爱的人关系更进一步！",
         "心情愉悦，充满正能量，周围的人都会被你感染！",
         "小幸运不断，可能会收到意想不到的礼物或好消息！",
         "今日宜大胆尝试新事物，会有意想不到的收获和惊喜！",
@@ -23,7 +23,7 @@ def generate_positive_fortune():
     ]
     
     selected_fortune = random.choice(positive_fortunes)
-    return f"贾子先觉得{selected_fortune}"
+    return f"贾子先觉得晓晗-{selected_fortune}"
 
 def main():
     st.set_page_config(
@@ -106,3 +106,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
