@@ -34,56 +34,75 @@ def main():
 
     st.title("💖 贾子先的运势计算器 ✨")
     st.write("---")
-    
-    # 注意：这里使用了三引号，必须成对出现
-    st.markdown(
-        """
-        ### 亲爱的朋友，愿你的每一天都充满阳光和好运！
-        点击下方按钮，看看贾子先觉得你今天运势如何吧！
-        """
-    )
 
     # 获取今天的日期
     today = datetime.date.today()
     today_str = today.strftime("%Y-%m-%d")
 
-    # 使用session state来存储今天的运势
+    # --- 数据初始化逻辑 ---
+    
+    # 1. 如果今天还没有生成运势，先在后台生成好（但暂时不显示）
     if f"fortune_for_{today_str}" not in st.session_state:
         st.session_state[f"fortune_for_{today_str}"] = generate_positive_fortune()
-        st.session_state["last_draw_date"] = today_str 
+        st.session_state["last_draw_date"] = today_str
+        # 新增一个状态：记录今天是否已经点击了“揭晓”按钮
+        st.session_state["is_revealed"] = False 
 
-    # 检查是否是新的一天
+    # 2. 如果跨天了（日期变了），重置数据和揭晓状态
     if st.session_state.get("last_draw_date") != today_str:
         st.session_state[f"fortune_for_{today_str}"] = generate_positive_fortune()
         st.session_state["last_draw_date"] = today_str
+        st.session_state["is_revealed"] = False # 新的一天，重置为未揭晓状态
 
-    st.subheader(f"🗓️ {today_str} 的专属好运势：")
+    # --- 界面显示逻辑 ---
 
-    # 创建一个大的容器来显示运势
-    with st.container():
-        # 这里使用的是f-string多行拼接，注意不要漏掉引号
+    st.markdown(
+        """
+        ### 亲爱的朋友，愿你的每一天都充满阳光和好运！
+        """
+    )
+
+    # 判断：如果还没有揭晓（is_revealed 为 False），显示“抽取按钮”
+    if not st.session_state.get("is_revealed", False):
+        st.info(f"今天是 {today_str}，贾子先为你准备了一份专属好运，准备好了吗？")
+        
+        # 创建一个占位容器，居中显示按钮
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            # 点击按钮后
+            if st.button("✨ 点击揭晓今日运势 ✨", type="primary", use_container_width=True):
+                # 修改状态为“已揭晓”
+                st.session_state["is_revealed"] = True
+                # 强制刷新页面，立刻显示运势结果
+                st.rerun()
+
+    # 判断：如果已经揭晓（is_revealed 为 True），显示“运势卡片”
+    else:
+        st.subheader(f"🗓️ {today_str} 的专属好运势：")
+        
+        # 显示带有动画效果的运势框
+        with st.container():
+            st.markdown(
+                f"<div style='background-color:#E8F8F5; padding: 20px; border-radius: 10px; border: 2px solid #2ECC71; text-align: center; font-size: 24px; color: #2C3E50; font-weight: bold; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);'>"
+                f"{st.session_state[f'fortune_for_{today_str}']}"
+                f"</div>",
+                unsafe_allow_html=True
+            )
+        
+        st.write("") # 加点空隙
+        
+        # 只有在揭晓后，才显示底部的祝福和分享按钮
         st.markdown(
-            f"<div style='background-color:#E8F8F5; padding: 20px; border-radius: 10px; border: 2px solid #2ECC71; text-align: center; font-size: 24px; color: #2C3E50; font-weight: bold;'>"
-            f"{st.session_state[f'fortune_for_{today_str}']}"
-            f"</div>",
+            """
+            <p style='text-align: center; font-style: italic; color: #888;'>
+            贾子先祝你拥有美好的一天！
+            </p>
+            """,
             unsafe_allow_html=True
         )
 
-    st.write("---")
-    
-    # 【易错点】这里的 markdown 也是三引号，请检查你的代码这里是否漏了 """
-    st.markdown(
-        """
-        <p style='text-align: center; font-style: italic; color: #888;'>
-        贾子先祝你拥有美好的一天！
-        </p>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # 额外添加一个“分享”按钮
-    if st.button("🎉 谢谢贾子先！", help="点击领取祝福"):
-        st.balloons() 
+        if st.button("🎉 谢谢贾子先！", help="点击领取祝福"):
+            st.balloons()
 
 if __name__ == "__main__":
     main()
