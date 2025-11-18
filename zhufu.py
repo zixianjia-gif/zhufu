@@ -115,7 +115,7 @@ def generate_positive_fortune():
     ]
     
     selected_fortune = random.choice(positive_fortunes)
-    return f"贾子先觉得{selected_fortune}"
+    return f"贾大仙觉得--{selected_fortune}"
 
 def main():
     st.set_page_config(
@@ -124,7 +124,7 @@ def main():
         layout="centered"
     )
 
-    st.title("💖 贾子先的运势计算器 ✨")
+    st.title("💖 贾大仙的运势计算器V1 ✨")
     st.write("---")
 
     # 获取今天的日期
@@ -150,13 +150,13 @@ def main():
 
     st.markdown(
         """
-        ### 亲爱的朋友，愿你的每一天都充满阳光和好运！
+        ### 亲爱的晓晗，愿你的每一天都充满阳光和好运！
         """
     )
 
     # 判断：如果还没有揭晓（is_revealed 为 False），显示“抽取按钮”
     if not st.session_state.get("is_revealed", False):
-        st.info(f"今天是 {today_str}，贾子先为你准备了一份专属好运，准备好了吗？")
+        st.info(f"今天是 {today_str}，贾大仙为你准备了一份专属好运，准备好了吗？")
         
         # 创建一个占位容器，居中显示按钮
         col1, col2, col3 = st.columns([1, 2, 1])
@@ -187,14 +187,15 @@ def main():
         st.markdown(
             """
             <p style='text-align: center; font-style: italic; color: #888;'>
-            贾子先祝你拥有美好的一天！
+            贾大仙祝你拥有美好的一天！
             </p>
             """,
             unsafe_allow_html=True
         )
 
-        if st.button("🎉 谢谢贾子先！", help="点击领取祝福"):
+        if st.button("🎉 谢谢贾大仙！", help="点击领取祝福"):
             st.balloons()
 
 if __name__ == "__main__":
     main()
+
